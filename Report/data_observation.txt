@@ -1,0 +1,22 @@
+資料觀察，以將原始資料整理成可以處理的形式。
+
+首先最簡單的，將 Arrival year, month, day 整理，
+將所有布林性質的標籤轉換成 0-1 coding。
+
+觀察訓練資料，發現總收入多少和該抵達日有多少筆入住資料有關，將 training_data 整理成這種形式：
+
+	該天總入住數，標籤型 Features, 數值型 Features 的平均, Revenue Scale
+
+同樣也將測試資料作一樣的整理。
+
+這樣子布林性質的標籤就會變成某種「比率」性質的 feature。
+
+
+預測的話，就是透過測試的日期回推出和訓練相同的 Features
+然後再放進模型裡即可。
+
+如果要預測的當天沒有資料，就是所有欄位都是 0。
+
+code 的部份，first_data_arrangement.py 將原始的 train.csv 和 train_label.csv 融合成一個檔案方便處理。輸出是 first_train_data.csv
+
+final_data_arrangement.py 處理剩下的資料數值化和日期融合，輸出 final_train_data.csv。
