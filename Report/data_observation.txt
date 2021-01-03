@@ -20,3 +20,7 @@
 code 的部份，first_data_arrangement.py 將原始的 train.csv 和 train_label.csv 融合成一個檔案方便處理。輸出是 first_train_data.csv
 
 final_data_arrangement.py 處理剩下的資料數值化和日期融合，輸出 final_train_data.csv。
+
+test_data_arrangement 處理資料數值化和日期融合，將 test.csv 轉換成 final_test.csv。
+
+預測時使用 final_test.csv 和 test_nolabel.csv 作為資料輸入。
