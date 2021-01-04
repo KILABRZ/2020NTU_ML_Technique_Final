@@ -10,7 +10,7 @@ train['arrival_date_month'] = train['arrival_date_month'].replace(transform)
 del train['ID']
 train = train.sort_values(by=['arrival_date_year', 'arrival_date_month', 'arrival_date_day_of_month'], kind='mergesort')
 
-train = train[['arrival_date_year','arrival_date_month', 'arrival_date_day_of_month', 
+train = train[['is_canceled', 'arrival_date_year','arrival_date_month', 'arrival_date_day_of_month', 
 'hotel', 'is_repeated_guest', 'lead_time', 'stays_in_weekend_nights',
 'stays_in_week_nights', 'adults', 'children', 'babies',
 'total_of_special_requests', 'reserved_room_type', 'customer_type', 'meal', 'country']]
@@ -25,6 +25,7 @@ train = train.rename(columns=
 	  'arrival_date_day_of_month':'D',
 	  'hotel' : 'HotelType',
 	  'is_repeated_guest' : 'R',
+	  'is_canceled' : 'X',
 	  'total_of_special_requests' : 'TotalSR',
 	  'lead_time' : 'LT',
 	  'reserved_room_type' : 'RoomType',
@@ -33,6 +34,21 @@ train = train.rename(columns=
 	  'stays_in_week_nights' : 'WeekNight',
 	  'adults' : 'A', 'children' : 'C', 'babies' : 'B'})
 
+
+cns = sorted(list(set(train['M'])))
+print(cns)
+
+pending_lists = [list() for cn in cns]
+
+for i, cn in enumerate(cns):
+	for r in train['M']:
+		pending_lists[i].append(int(r == cn))
+
+for i, cn in enumerate(cns):
+	train['MonthIs{}'.format(cn)] = pending_lists[i]
+
+del cns
+del pending_lists
 
 cns = list(set(train['country']))
 

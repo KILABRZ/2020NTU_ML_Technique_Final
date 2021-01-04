@@ -11,15 +11,15 @@ class DNN(nn.Module):
 
 		self.dnn = nn.Sequential(
 			nn.Flatten(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 1)
+			nn.Linear(52, 1)
 		)
 
 	def forward(self, x):
@@ -40,13 +40,15 @@ def RandomDataSplit(X, Y, r):
 	val_y = Y[val_part]
 	return train_X, train_Y, val_X, val_y
 
-
 train_data = pd.read_csv('../Data/train_data.csv').to_numpy().astype(np.float64)
 train_label = pd.read_csv('../Data/train_label.csv').to_numpy().astype(np.float64)
 
 train_data = train_data[:,1:]
-train_label = train_label[:,3:4]
+train_data[:,2] *= (1 - train_data[:,3])
+train_data = np.concatenate((train_data[:,0:3], train_data[:,4:]), axis=1)
+train_data = train_data[:,2:]
 
+train_label = train_label[:,3:4]
 
 X = torch.Tensor(train_data)
 Y = torch.Tensor(train_label)

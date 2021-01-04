@@ -33,6 +33,20 @@ test = test.rename(columns=
 	  'stays_in_week_nights' : 'WeekNight',
 	  'adults' : 'A', 'children' : 'C', 'babies' : 'B'})
 
+cns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
+pending_lists = [list() for cn in cns]
+
+for i, cn in enumerate(cns):
+	for r in test['M']:
+		pending_lists[i].append(int(r == cn))
+
+for i, cn in enumerate(cns):
+	test['MonthIs{}'.format(cn)] = pending_lists[i]
+
+del cns
+del pending_lists
+
 
 cns = list(set(test['country']))
 true_cns = ['FRA', 'NLD', 'NP', 'BEL', 'BRA', 'ITA', 'DEU', 'ESP', 'PRT', 'GBR', 'IRL']

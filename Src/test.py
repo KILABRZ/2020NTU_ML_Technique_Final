@@ -11,15 +11,15 @@ class DNN(nn.Module):
 
 		self.dnn = nn.Sequential(
 			nn.Flatten(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 42),
+			nn.Linear(52, 52),
 			nn.ReLU(),
-			nn.Linear(42, 1)
+			nn.Linear(52, 1)
 		)
 
 	def forward(self, x):
@@ -32,7 +32,7 @@ model.load_state_dict(torch.load(model_path))
 
 test_data = pd.read_csv('../Data/test_data.csv').to_numpy().astype(np.float64)
 test_timestamp = test_data[:,:3].astype(np.int32)
-test_data = test_data[:,1:]
+test_data = test_data[:,3:]
 test_data = torch.Tensor(test_data)
 
 
