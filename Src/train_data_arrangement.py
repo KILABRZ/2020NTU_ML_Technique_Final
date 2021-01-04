@@ -11,8 +11,8 @@ del train['ID']
 train = train.sort_values(by=['arrival_date_year', 'arrival_date_month', 'arrival_date_day_of_month'], kind='mergesort')
 
 train = train[['arrival_date_year','arrival_date_month', 'arrival_date_day_of_month', 
-'hotel', 'is_canceled', 'is_repeated_guest', 'lead_time', 'stays_in_weekend_nights',
-'stays_in_week_nights', 'adults', 'children', 'babies', 'adr',
+'hotel', 'is_repeated_guest', 'lead_time', 'stays_in_weekend_nights',
+'stays_in_week_nights', 'adults', 'children', 'babies',
 'total_of_special_requests', 'reserved_room_type', 'customer_type', 'meal', 'country']]
 
 train['hotel'] = train['hotel'].replace({'Resort Hotel' : 0, 'City Hotel' : 1})
@@ -24,9 +24,7 @@ train = train.rename(columns=
 	  'arrival_date_month': 'M',
 	  'arrival_date_day_of_month':'D',
 	  'hotel' : 'HotelType',
-	  'is_canceled' : 'Cancel',
 	  'is_repeated_guest' : 'R',
-	  'adr' : 'Adr',
 	  'total_of_special_requests' : 'TotalSR',
 	  'lead_time' : 'LT',
 	  'reserved_room_type' : 'RoomType',
@@ -43,7 +41,7 @@ for cn in cns:
 	if s <= 1500:
 		train['country'] = train['country'].replace({cn : 'NP'})
 
-cns = list(set(train['country']))
+cns = sorted(list(set(train['country'])))
 
 pending_lists = [list() for cn in cns]
 
@@ -58,7 +56,7 @@ del train['country']
 del cns
 del pending_lists
 
-cns = list(set(train['RoomType']))
+cns = sorted(list(set(train['RoomType'])))
 
 pending_lists = [list() for cn in cns]
 
@@ -73,7 +71,7 @@ del train['RoomType']
 del cns
 del pending_lists
 
-cns = list(set(train['GuestType']))
+cns = sorted(list(set(train['GuestType'])))
 
 pending_lists = [list() for cn in cns]
 
@@ -88,7 +86,7 @@ del train['GuestType']
 del cns
 del pending_lists
 
-cns = list(set(train['meal']))
+cns = sorted(list(set(train['meal'])))
 
 pending_lists = [list() for cn in cns]
 
@@ -110,3 +108,19 @@ train = pd.concat((group.size(), group.mean()), axis=1)
 
 with open('../Data/train_data.csv', 'w') as f:
 	train.to_csv(f, index=True, float_format='%.5f')
+
+train_label = open('../RawData/train_label.csv', 'r').read().split('\n')
+
+train_label[0] = 'Y,M,D,label'
+
+for i, line in enumerate(train_label[1:]):
+	if line == '': continue
+	date, label = line.split(',')
+	y, m, d = date.split('-')
+	y = str(int(y))
+	m = str(int(m))
+	d = str(int(d))
+
+	train_label[i+1] = '{},{},{},{}'.format(y,m,d,label)
+
+open('../Data/train_label.csv', 'w').write('\n'.join(train_label))
